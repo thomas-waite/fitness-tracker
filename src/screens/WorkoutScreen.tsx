@@ -1,34 +1,6 @@
 import { EXERCISES, getDay } from '../data/program'
+import Stepper from '../components/Stepper'
 import type { ActiveWorkout, WorkoutLog, WorkoutSlot } from '../types'
-
-function Stepper({
-  value,
-  step,
-  min,
-  unit,
-  onChange,
-}: {
-  value: number
-  step: number
-  min: number
-  unit: string
-  onChange: (v: number) => void
-}) {
-  return (
-    <div className="stepper">
-      <button className="step-btn" onClick={() => onChange(Math.max(min, value - step))}>
-        −
-      </button>
-      <span className="step-value">
-        {value}
-        <span className="step-unit">{unit}</span>
-      </span>
-      <button className="step-btn" onClick={() => onChange(value + step)}>
-        +
-      </button>
-    </div>
-  )
-}
 
 function previousSummary(logs: WorkoutLog[], slotId: string): string | null {
   const sorted = [...logs].sort((a, b) => b.finishedAt.localeCompare(a.finishedAt))
@@ -153,6 +125,7 @@ export default function WorkoutScreen({
                   value={set.weight}
                   step={5}
                   min={0}
+                  max={600}
                   unit="lbs"
                   onChange={(v) => updateSet(i, { weight: v })}
                 />
@@ -164,6 +137,7 @@ export default function WorkoutScreen({
                 value={set.reps}
                 step={def.kind === 'timed' ? 5 : 1}
                 min={0}
+                max={def.kind === 'timed' ? 600 : 50}
                 unit=""
                 onChange={(v) => updateSet(i, { reps: v })}
               />

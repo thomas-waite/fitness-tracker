@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { EXERCISES } from '../data/program'
+import Stepper from '../components/Stepper'
 import type { AppState, ExerciseKind, LoggedEntry, LoggedSet } from '../types'
 
 interface DraftEntry {
@@ -7,35 +8,6 @@ interface DraftEntry {
   name: string
   kind: ExerciseKind
   sets: LoggedSet[]
-}
-
-function Stepper({
-  value,
-  step,
-  min,
-  unit,
-  onChange,
-}: {
-  value: number
-  step: number
-  min: number
-  unit: string
-  onChange: (v: number) => void
-}) {
-  return (
-    <div className="stepper">
-      <button className="step-btn" onClick={() => onChange(Math.max(min, value - step))}>
-        −
-      </button>
-      <span className="step-value">
-        {value}
-        <span className="step-unit">{unit}</span>
-      </span>
-      <button className="step-btn" onClick={() => onChange(value + step)}>
-        +
-      </button>
-    </div>
-  )
 }
 
 function defaultSet(kind: ExerciseKind, weight: number): LoggedSet {
@@ -126,6 +98,7 @@ export default function CustomWorkoutScreen({
                   value={set.weight}
                   step={5}
                   min={0}
+                  max={600}
                   unit="lbs"
                   onChange={(v) =>
                     updateEntry(i, {
@@ -138,6 +111,7 @@ export default function CustomWorkoutScreen({
                 value={set.reps}
                 step={entry.kind === 'timed' ? 5 : 1}
                 min={0}
+                max={entry.kind === 'timed' ? 600 : 50}
                 unit={entry.kind === 'timed' ? 'sec' : 'reps'}
                 onChange={(v) =>
                   updateEntry(i, {
@@ -185,7 +159,7 @@ export default function CustomWorkoutScreen({
 
       <div className="set-field duration-row">
         <span className="field-label">Duration (min)</span>
-        <Stepper value={durationMin} step={5} min={5} unit="" onChange={setDurationMin} />
+        <Stepper value={durationMin} step={5} min={5} max={240} unit="" onChange={setDurationMin} />
       </div>
 
       <button className="btn-primary" disabled={!canSave} onClick={save}>
