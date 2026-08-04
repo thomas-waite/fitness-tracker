@@ -23,7 +23,7 @@ export default function HistoryScreen({ logs }: { logs: WorkoutLog[] }) {
             <li key={log.id} className="history-item">
               <button className="history-row" onClick={() => setOpenId(open ? null : log.id)}>
                 <span>
-                  <strong>{getDay(log.dayKey).title}</strong>{' '}
+                  <strong>{log.dayKey === 'custom' ? 'Custom' : getDay(log.dayKey).title}</strong>{' '}
                   <span className="subtle">
                     {new Date(log.finishedAt).toLocaleDateString(undefined, {
                       month: 'short',

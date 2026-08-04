@@ -11,7 +11,9 @@ const WEEKDAY: Record<DayKey, number> = { monday: 1, wednesday: 3, friday: 5 }
  * after the last completed workout.
  */
 export function nextDayKey(logs: WorkoutLog[], now: Date = new Date()): DayKey {
-  if (logs.length === 0) {
+  // Custom workouts don't advance the program cycle.
+  const programLogs = logs.filter((l) => l.dayKey !== 'custom')
+  if (programLogs.length === 0) {
     const today = now.getDay()
     for (let offset = 0; offset < 7; offset++) {
       const weekday = (today + offset) % 7
@@ -20,8 +22,8 @@ export function nextDayKey(logs: WorkoutLog[], now: Date = new Date()): DayKey {
     }
     return 'monday'
   }
-  const last = [...logs].sort((a, b) => b.finishedAt.localeCompare(a.finishedAt))[0]
-  const idx = DAY_ORDER.indexOf(last.dayKey)
+  const last = [...programLogs].sort((a, b) => b.finishedAt.localeCompare(a.finishedAt))[0]
+  const idx = DAY_ORDER.indexOf(last.dayKey as DayKey)
   return DAY_ORDER[(idx + 1) % DAY_ORDER.length]
 }
 
@@ -38,8 +40,10 @@ export function nextDateFor(dayKey: DayKey, now: Date = new Date()): Date {
 export function nextWorkoutDate(logs: WorkoutLog[], now: Date = new Date()): Date {
   const key = nextDayKey(logs, now)
   const candidate = nextDateFor(key, now)
+  // A custom workout today doesn't satisfy the scheduled program workout.
   const doneToday = logs.some(
-    (l) => new Date(l.finishedAt).toDateString() === now.toDateString(),
+    (l) =>
+      l.dayKey !== 'custom' && new Date(l.finishedAt).toDateString() === now.toDateString(),
   )
   if (doneToday && candidate.toDateString() === now.toDateString()) {
     const next = new Date(candidate)
