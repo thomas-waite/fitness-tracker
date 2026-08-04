@@ -12,16 +12,16 @@ export default function DashboardScreen({
   onBodyweight,
 }: {
   state: AppState
-  onBodyweight: (kg: number | null) => void
+  onBodyweight: (lbs: number | null) => void
 }) {
   const { logs } = state
   const lastLog = [...logs].sort((a, b) => b.finishedAt.localeCompare(a.finishedAt))[0]
 
   const editBodyweight = () => {
-    const raw = window.prompt('Bodyweight (kg)', state.bodyweightKg?.toString() ?? '')
+    const raw = window.prompt('Bodyweight (lbs)', state.bodyweight?.toString() ?? '')
     if (raw === null) return
-    const kg = parseFloat(raw)
-    onBodyweight(Number.isFinite(kg) && kg > 0 ? kg : null)
+    const lbs = parseFloat(raw)
+    onBodyweight(Number.isFinite(lbs) && lbs > 0 ? lbs : null)
   }
 
   return (
@@ -35,7 +35,7 @@ export default function DashboardScreen({
           return (
             <div className="tile" key={lift.id}>
               <span className="tile-label">{lift.name}</span>
-              <span className="tile-value">{v > 0 ? `${v.toFixed(1)} kg` : '—'}</span>
+              <span className="tile-value">{v > 0 ? `${v.toFixed(1)} lbs` : '—'}</span>
             </div>
           )
         })}
@@ -45,7 +45,7 @@ export default function DashboardScreen({
         <button className="tile tappable" onClick={editBodyweight}>
           <span className="tile-label">Bodyweight</span>
           <span className="tile-value">
-            {state.bodyweightKg ? `${state.bodyweightKg} kg` : 'Tap to set'}
+            {state.bodyweight ? `${state.bodyweight} lbs` : 'Tap to set'}
           </span>
         </button>
         <div className="tile">
@@ -69,7 +69,7 @@ export default function DashboardScreen({
         </div>
         <div className="tile wide">
           <span className="tile-label">Weekly volume</span>
-          <span className="tile-value">{Math.round(weeklyVolume(logs)).toLocaleString()} kg</span>
+          <span className="tile-value">{Math.round(weeklyVolume(logs)).toLocaleString()} lbs</span>
         </div>
       </div>
     </div>

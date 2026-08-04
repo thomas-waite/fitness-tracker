@@ -30,22 +30,22 @@ function entriesFor(
 }
 
 describe('roundToPlate', () => {
-  it('rounds to the nearest 2.5 kg', () => {
-    expect(roundToPlate(41.2)).toBe(40)
-    expect(roundToPlate(41.25)).toBe(42.5)
-    expect(roundToPlate(45)).toBe(45)
+  it('rounds to the nearest 5 lbs', () => {
+    expect(roundToPlate(92)).toBe(90)
+    expect(roundToPlate(93)).toBe(95)
+    expect(roundToPlate(95)).toBe(95)
   })
 })
 
 describe('incrementFor', () => {
-  it('uses +2.5 for squat and bench', () => {
-    expect(incrementFor('squat', 100)).toBe(2.5)
-    expect(incrementFor('bench', 60)).toBe(2.5)
+  it('uses +5 for squat and bench', () => {
+    expect(incrementFor('squat', 200)).toBe(5)
+    expect(incrementFor('bench', 135)).toBe(5)
   })
 
-  it('uses +5 for deadlift until heavy, then +2.5', () => {
-    expect(incrementFor('deadlift', 100)).toBe(5)
-    expect(incrementFor('deadlift', 140)).toBe(2.5)
+  it('uses +10 for deadlift until heavy, then +5', () => {
+    expect(incrementFor('deadlift', 225)).toBe(10)
+    expect(incrementFor('deadlift', 300)).toBe(5)
   })
 })
 
@@ -65,8 +65,8 @@ describe('slotSucceeded', () => {
 describe('slotWeight', () => {
   it('applies the light-day factor and plate rounding', () => {
     const light = getDay('wednesday').slots[0]
-    expect(slotWeight(light, 100)).toBe(80)
-    expect(slotWeight(light, 42.5)).toBe(35) // 34 -> rounded to 35
+    expect(slotWeight(light, 200)).toBe(160)
+    expect(slotWeight(light, 135)).toBe(110) // 108 -> rounded to 110
   })
 })
 
@@ -74,16 +74,16 @@ describe('applyProgression', () => {
   it('increases weight after a fully completed workout', () => {
     const start = initialProgress()
     const { next, changes } = applyProgression(start, 'monday', entriesFor('monday', {}))
-    expect(next.squat.weight).toBe(start.squat.weight + 2.5)
-    expect(next.bench.weight).toBe(start.bench.weight + 2.5)
-    expect(next.row.weight).toBe(start.row.weight + 2.5)
+    expect(next.squat.weight).toBe(start.squat.weight + 5)
+    expect(next.bench.weight).toBe(start.bench.weight + 5)
+    expect(next.row.weight).toBe(start.row.weight + 5)
     expect(changes.every((c) => c.kind === 'increase')).toBe(true)
   })
 
-  it('adds +5 to deadlift on wednesday', () => {
+  it('adds +10 to deadlift on wednesday', () => {
     const start = initialProgress()
     const { next } = applyProgression(start, 'wednesday', entriesFor('wednesday', {}))
-    expect(next.deadlift.weight).toBe(start.deadlift.weight + 5)
+    expect(next.deadlift.weight).toBe(start.deadlift.weight + 10)
   })
 
   it('does not progress squat from the light day', () => {
@@ -104,22 +104,22 @@ describe('applyProgression', () => {
   it('deloads 10% after three consecutive failures', () => {
     let progression: Record<string, { weight: number; failStreak: number }> = {
       ...initialProgress(),
-      bench: { weight: 100, failStreak: 0 },
+      bench: { weight: 200, failStreak: 0 },
     }
     const failed = entriesFor('monday', { bench: [5, 5, 5, 5, 3] })
     for (let i = 0; i < 2; i++) {
       progression = applyProgression(progression, 'monday', failed).next
     }
-    expect(progression.bench).toEqual({ weight: 100, failStreak: 2 })
+    expect(progression.bench).toEqual({ weight: 200, failStreak: 2 })
     const { next, changes } = applyProgression(progression, 'monday', failed)
-    expect(next.bench.weight).toBe(90)
+    expect(next.bench.weight).toBe(180)
     expect(next.bench.failStreak).toBe(0)
     expect(changes.find((c) => c.exerciseId === 'bench')?.kind).toBe('deload')
   })
 
   it('resets the fail streak after a success', () => {
-    const progression = { ...initialProgress(), bench: { weight: 100, failStreak: 2 } }
+    const progression = { ...initialProgress(), bench: { weight: 200, failStreak: 2 } }
     const { next } = applyProgression(progression, 'monday', entriesFor('monday', {}))
-    expect(next.bench).toEqual({ weight: 102.5, failStreak: 0 })
+    expect(next.bench).toEqual({ weight: 205, failStreak: 0 })
   })
 })

@@ -28,8 +28,8 @@ export default function RecordsScreen({ logs }: { logs: WorkoutLog[] }) {
             <li key={id} className="pr-row">
               <span>{EXERCISES[id].name}</span>
               <span>
-                <strong>{heavy} kg</strong>
-                <span className="subtle"> · e1RM {orm.toFixed(1)} kg</span>
+                <strong>{heavy} lbs</strong>
+                <span className="subtle"> · e1RM {orm.toFixed(1)} lbs</span>
               </span>
             </li>
           )
@@ -41,7 +41,7 @@ export default function RecordsScreen({ logs }: { logs: WorkoutLog[] }) {
         <div className="tile">
           <span className="tile-label">Best volume</span>
           <span className="tile-value">
-            {volume > 0 ? `${Math.round(volume).toLocaleString()} kg` : '—'}
+            {volume > 0 ? `${Math.round(volume).toLocaleString()} lbs` : '—'}
           </span>
         </div>
         <div className="tile">
@@ -51,7 +51,7 @@ export default function RecordsScreen({ logs }: { logs: WorkoutLog[] }) {
         <div className="tile wide">
           <span className="tile-label">Largest weight increase</span>
           <span className="tile-value">
-            {increase ? `${increase.name} +${increase.amount} kg` : '—'}
+            {increase ? `${increase.name} +${increase.amount} lbs` : '—'}
           </span>
         </div>
       </div>

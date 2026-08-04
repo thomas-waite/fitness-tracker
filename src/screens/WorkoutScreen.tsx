@@ -38,7 +38,7 @@ function previousSummary(logs: WorkoutLog[], slotId: string): string | null {
       if (entry.kind === 'weight') {
         const w = entry.sets[0].weight
         const reps = entry.sets.map((s) => s.reps).join(', ')
-        return `${w} kg × ${reps}`
+        return `${w} lbs × ${reps}`
       }
       return entry.sets.map((s) => s.reps).join(', ') + (entry.kind === 'timed' ? ' sec' : ' reps')
     }
@@ -131,7 +131,7 @@ export default function WorkoutScreen({
         {def.kind === 'weight' && (
           <div className="target-cell">
             <span className="big-num">{entry.sets[0]?.weight}</span>
-            <span className="subtle">kg suggested</span>
+            <span className="subtle">lbs suggested</span>
           </div>
         )}
       </div>
@@ -151,9 +151,9 @@ export default function WorkoutScreen({
                 <span className="field-label">Weight</span>
                 <Stepper
                   value={set.weight}
-                  step={2.5}
+                  step={5}
                   min={0}
-                  unit="kg"
+                  unit="lbs"
                   onChange={(v) => updateSet(i, { weight: v })}
                 />
               </div>
