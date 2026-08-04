@@ -5,9 +5,11 @@ import type { AppState } from '../types'
 export default function HomeScreen({
   state,
   onStart,
+  onCustom,
 }: {
   state: AppState
   onStart: () => void
+  onCustom: () => void
 }) {
   const dayKey = nextDayKey(state.logs)
   const day = getDay(dayKey)
@@ -41,6 +43,9 @@ export default function HomeScreen({
 
       <button className="btn-primary" onClick={onStart}>
         Start Workout
+      </button>
+      <button className="btn-secondary" onClick={onCustom}>
+        Log a custom workout
       </button>
     </div>
   )

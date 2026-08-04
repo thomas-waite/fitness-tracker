@@ -23,6 +23,11 @@ describe('nextDayKey', () => {
     const logs = [log('monday', '2026-08-03T10:00:00'), log('wednesday', '2026-08-05T10:00:00')]
     expect(nextDayKey(logs)).toBe('friday')
   })
+
+  it('ignores custom workouts when cycling the program', () => {
+    const logs = [log('monday', '2026-08-03T10:00:00'), log('custom', '2026-08-04T10:00:00')]
+    expect(nextDayKey(logs)).toBe('wednesday')
+  })
 })
 
 describe('nextWorkoutDate', () => {
@@ -38,5 +43,11 @@ describe('nextWorkoutDate', () => {
     const next = nextWorkoutDate(logs, now)
     expect(next.getDay()).toBe(3)
     expect(next.getTime()).toBeGreaterThan(now.getTime())
+  })
+
+  it('still schedules today when only a custom workout was done today', () => {
+    const now = new Date('2026-08-05T18:00:00') // Wednesday
+    const logs = [log('monday', '2026-08-03T10:00:00'), log('custom', '2026-08-05T09:00:00')]
+    expect(nextWorkoutDate(logs, now).toDateString()).toBe(now.toDateString())
   })
 })

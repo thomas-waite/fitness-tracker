@@ -7,6 +7,7 @@ import { nextDayKey } from './logic/schedule'
 import type { LoggedEntry, WorkoutLog } from './types'
 import HomeScreen from './screens/HomeScreen'
 import WorkoutScreen from './screens/WorkoutScreen'
+import CustomWorkoutScreen from './screens/CustomWorkoutScreen'
 import SummaryScreen, { type WorkoutSummary } from './screens/SummaryScreen'
 import DashboardScreen from './screens/DashboardScreen'
 import HistoryScreen from './screens/HistoryScreen'
@@ -26,6 +27,7 @@ export default function App() {
   const { state } = store
   const [tab, setTab] = useState<Tab>('home')
   const [summary, setSummary] = useState<WorkoutSummary | null>(null)
+  const [customOpen, setCustomOpen] = useState(false)
 
   const startWorkout = () => {
     const dayKey = nextDayKey(state.logs)
@@ -69,6 +71,20 @@ export default function App() {
     store.update({ activeWorkout: null })
   }
 
+  const saveCustomWorkout = (entries: LoggedEntry[], durationMin: number) => {
+    const log: WorkoutLog = {
+      id: `w-${Date.now()}`,
+      dayKey: 'custom',
+      finishedAt: new Date().toISOString(),
+      durationSec: durationMin * 60,
+      entries,
+    }
+    const summaryData = buildSummary(log, [], state.logs)
+    store.addLog(log, state.progression)
+    setCustomOpen(false)
+    setSummary(summaryData)
+  }
+
   if (summary) {
     return (
       <SummaryScreen
@@ -78,6 +94,16 @@ export default function App() {
           setSummary(null)
           setTab('home')
         }}
+      />
+    )
+  }
+
+  if (customOpen) {
+    return (
+      <CustomWorkoutScreen
+        state={state}
+        onSave={saveCustomWorkout}
+        onCancel={() => setCustomOpen(false)}
       />
     )
   }
@@ -97,7 +123,9 @@ export default function App() {
   return (
     <div className="app">
       <main className="content">
-        {tab === 'home' && <HomeScreen state={state} onStart={startWorkout} />}
+        {tab === 'home' && (
+          <HomeScreen state={state} onStart={startWorkout} onCustom={() => setCustomOpen(true)} />
+        )}
         {tab === 'dashboard' && (
           <DashboardScreen
             state={state}
@@ -138,7 +166,7 @@ function buildSummary(
     const now = best1RMInLog(log, entry.exerciseId)
     if (now <= 0) continue
     const before = best1RM(previousLogs, entry.exerciseId)
-    const name = EXERCISES[entry.exerciseId].name
+    const name = EXERCISES[entry.exerciseId]?.name ?? entry.name
     if (before > 0 && now > before) {
       improvements.push({ name, from: before, to: now })
       prs.push(`${name}: new best estimated 1RM — ${now.toFixed(1)} kg`)

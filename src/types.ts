@@ -72,7 +72,8 @@ export interface LoggedEntry {
 
 export interface WorkoutLog {
   id: string
-  dayKey: DayKey
+  /** Program day this workout followed, or 'custom' for ad-hoc workouts. */
+  dayKey: DayKey | 'custom'
   /** ISO date-time when the workout finished. */
   finishedAt: string
   durationSec: number
