@@ -6,8 +6,9 @@ import type {
   WorkoutSlot,
 } from '../types'
 
+/** Round to the nearest 5 lbs (smallest pair of standard plates). */
 export function roundToPlate(weight: number): number {
-  return Math.round(weight / 2.5) * 2.5
+  return Math.round(weight / 5) * 5
 }
 
 /** Weight to prescribe for a slot given the exercise's current working weight. */
@@ -18,8 +19,8 @@ export function slotWeight(slot: WorkoutSlot, workingWeight: number): number {
 export function incrementFor(exerciseId: string, currentWeight: number): number {
   const def = EXERCISES[exerciseId]
   if (!def || def.kind !== 'weight') return 0
-  const base = def.increment ?? 2.5
-  if (def.heavyThreshold !== undefined && currentWeight >= def.heavyThreshold) return 2.5
+  const base = def.increment ?? 5
+  if (def.heavyThreshold !== undefined && currentWeight >= def.heavyThreshold) return 5
   return base
 }
 
@@ -27,7 +28,7 @@ export function initialProgress(): Record<string, ExerciseProgress> {
   const out: Record<string, ExerciseProgress> = {}
   for (const def of Object.values(EXERCISES)) {
     if (def.kind === 'weight') {
-      out[def.id] = { weight: def.startWeight ?? 20, failStreak: 0 }
+      out[def.id] = { weight: def.startWeight ?? 45, failStreak: 0 }
     }
   }
   return out
@@ -70,7 +71,7 @@ export function applyProgression(
     const entry = entries.find((e) => e.slotId === slot.slotId)
     if (!entry) continue
 
-    const current = next[slot.exerciseId] ?? { weight: def.startWeight ?? 20, failStreak: 0 }
+    const current = next[slot.exerciseId] ?? { weight: def.startWeight ?? 45, failStreak: 0 }
 
     if (slotSucceeded(slot, entry.sets)) {
       const to = roundToPlate(current.weight + incrementFor(slot.exerciseId, current.weight))

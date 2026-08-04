@@ -14,7 +14,7 @@ checking items off a to-do list.
   with weight/rep steppers (no typing). Ticking a set activates the next one;
   finishing an exercise auto-advances to the next.
 - **Automatic progression** — complete every prescribed rep and the next
-  workout's weight goes up (+2.5 kg for most lifts, +5 kg for deadlift until
+  workout's weight goes up (+5 lbs for most lifts, +10 lbs for deadlift until
   heavy). Miss reps and the weight repeats; fail three workouts in a row at the
   same weight and it deloads 10%.
 - **Workout summary** — duration, estimated 1RM improvements, new PRs, and the

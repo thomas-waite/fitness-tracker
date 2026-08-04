@@ -129,7 +129,7 @@ export default function App() {
         {tab === 'dashboard' && (
           <DashboardScreen
             state={state}
-            onBodyweight={(kg) => store.update({ bodyweightKg: kg })}
+            onBodyweight={(lbs) => store.update({ bodyweight: lbs })}
           />
         )}
         {tab === 'history' && <HistoryScreen logs={state.logs} />}
@@ -169,17 +169,17 @@ function buildSummary(
     const name = EXERCISES[entry.exerciseId]?.name ?? entry.name
     if (before > 0 && now > before) {
       improvements.push({ name, from: before, to: now })
-      prs.push(`${name}: new best estimated 1RM — ${now.toFixed(1)} kg`)
+      prs.push(`${name}: new best estimated 1RM — ${now.toFixed(1)} lbs`)
     }
     const heaviestNow = entry.sets.reduce((m, s) => (s.reps >= 1 ? Math.max(m, s.weight) : m), 0)
     if (heaviestNow > 0 && heaviestNow > heaviestSet(previousLogs, entry.exerciseId)) {
-      prs.push(`${name}: heaviest lift ever — ${heaviestNow} kg`)
+      prs.push(`${name}: heaviest lift ever — ${heaviestNow} lbs`)
     }
   }
 
   const volume = logVolume(log)
   if (previousLogs.length > 0 && volume > bestSessionVolume(previousLogs)) {
-    prs.push(`Biggest session volume ever — ${Math.round(volume)} kg`)
+    prs.push(`Biggest session volume ever — ${Math.round(volume)} lbs`)
   }
 
   return { log, changes, improvements, prs }

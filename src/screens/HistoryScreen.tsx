@@ -54,7 +54,7 @@ export default function HistoryScreen({ logs }: { logs: WorkoutLog[] }) {
                                   .map((s) => `${s.reps}${entry.kind === 'timed' ? 's' : ''}`)
                                   .join('  ')}
                             {entry.kind === 'weight' && best > 0 && (
-                              <> · e1RM {best.toFixed(1)} kg</>
+                              <> · e1RM {best.toFixed(1)} lbs</>
                             )}
                           </span>
                         )}

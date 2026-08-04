@@ -1,19 +1,19 @@
 import type { DayKey, ExerciseDef, ProgramDay } from '../types'
 
 export const EXERCISES: Record<string, ExerciseDef> = {
-  squat: { id: 'squat', name: 'Back Squat', kind: 'weight', startWeight: 40, increment: 2.5 },
-  bench: { id: 'bench', name: 'Bench Press', kind: 'weight', startWeight: 30, increment: 2.5 },
-  row: { id: 'row', name: 'Barbell Row', kind: 'weight', startWeight: 30, increment: 2.5 },
-  ohp: { id: 'ohp', name: 'Overhead Press', kind: 'weight', startWeight: 25, increment: 2.5 },
+  squat: { id: 'squat', name: 'Back Squat', kind: 'weight', startWeight: 90, increment: 5 },
+  bench: { id: 'bench', name: 'Bench Press', kind: 'weight', startWeight: 65, increment: 5 },
+  row: { id: 'row', name: 'Barbell Row', kind: 'weight', startWeight: 65, increment: 5 },
+  ohp: { id: 'ohp', name: 'Overhead Press', kind: 'weight', startWeight: 55, increment: 5 },
   deadlift: {
     id: 'deadlift',
     name: 'Deadlift',
     kind: 'weight',
-    startWeight: 60,
-    increment: 5,
-    heavyThreshold: 140,
+    startWeight: 135,
+    increment: 10,
+    heavyThreshold: 300,
   },
-  rdl: { id: 'rdl', name: 'Romanian Deadlift', kind: 'weight', startWeight: 40, increment: 2.5 },
+  rdl: { id: 'rdl', name: 'Romanian Deadlift', kind: 'weight', startWeight: 90, increment: 5 },
   plank: { id: 'plank', name: 'Plank', kind: 'timed' },
   pullup: { id: 'pullup', name: 'Pull-ups', kind: 'bodyweight' },
   dips: { id: 'dips', name: 'Dips', kind: 'bodyweight' },

@@ -58,7 +58,7 @@ export default function CustomWorkoutScreen({
 
   const addExercise = (exerciseId: string) => {
     const def = EXERCISES[exerciseId]
-    const weight = state.progression[exerciseId]?.weight ?? 20
+    const weight = state.progression[exerciseId]?.weight ?? 45
     setEntries((es) => [
       ...es,
       { exerciseId, name: def.name, kind: def.kind, sets: [defaultSet(def.kind, weight)] },
@@ -71,7 +71,7 @@ export default function CustomWorkoutScreen({
     const id = 'custom-' + name.toLowerCase().replace(/[^a-z0-9]+/g, '-')
     setEntries((es) => [
       ...es,
-      { exerciseId: id, name, kind: 'weight', sets: [defaultSet('weight', 20)] },
+      { exerciseId: id, name, kind: 'weight', sets: [defaultSet('weight', 45)] },
     ])
   }
 
@@ -124,9 +124,9 @@ export default function CustomWorkoutScreen({
               {entry.kind === 'weight' && (
                 <Stepper
                   value={set.weight}
-                  step={2.5}
+                  step={5}
                   min={0}
-                  unit="kg"
+                  unit="lbs"
                   onChange={(v) =>
                     updateEntry(i, {
                       sets: entry.sets.map((x, k) => (k === s ? { ...x, weight: v } : x)),
@@ -161,7 +161,7 @@ export default function CustomWorkoutScreen({
               updateEntry(i, {
                 sets: [
                   ...entry.sets,
-                  entry.sets[entry.sets.length - 1] ?? defaultSet(entry.kind, 20),
+                  entry.sets[entry.sets.length - 1] ?? defaultSet(entry.kind, 45),
                 ],
               })
             }

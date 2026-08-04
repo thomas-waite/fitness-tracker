@@ -53,7 +53,7 @@ export default function SummaryScreen({
           <ul className="plain-list">
             {improvements.map((imp) => (
               <li key={imp.name}>
-                {imp.name}: {imp.from.toFixed(1)} → <strong>{imp.to.toFixed(1)} kg</strong>
+                {imp.name}: {imp.from.toFixed(1)} → <strong>{imp.to.toFixed(1)} lbs</strong>
               </li>
             ))}
           </ul>
@@ -80,13 +80,13 @@ export default function SummaryScreen({
                 {c.name}:{' '}
                 {c.kind === 'increase' && (
                   <strong className="up">
-                    {c.from} → {c.to} kg
+                    {c.from} → {c.to} lbs
                   </strong>
                 )}
-                {c.kind === 'repeat' && <span>repeat {c.to} kg</span>}
+                {c.kind === 'repeat' && <span>repeat {c.to} lbs</span>}
                 {c.kind === 'deload' && (
                   <span className="down">
-                    deload {c.from} → {c.to} kg
+                    deload {c.from} → {c.to} lbs
                   </span>
                 )}
               </li>

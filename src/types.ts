@@ -6,11 +6,11 @@ export interface ExerciseDef {
   id: string
   name: string
   kind: ExerciseKind
-  /** Starting working weight in kg (weight exercises only). */
+  /** Starting working weight in lbs (weight exercises only). */
   startWeight?: number
-  /** Weight added after a successful workout, in kg. */
+  /** Weight added after a successful workout, in lbs. */
   increment?: number
-  /** Above this weight the increment drops to 2.5 kg ("until heavy"). */
+  /** Above this weight the increment drops to 5 lbs ("until heavy"). */
   heavyThreshold?: number
 }
 
@@ -83,6 +83,7 @@ export interface WorkoutLog {
 export interface AppState {
   progression: Record<string, ExerciseProgress>
   logs: WorkoutLog[]
-  bodyweightKg: number | null
+  /** Bodyweight in lbs. */
+  bodyweight: number | null
   activeWorkout: ActiveWorkout | null
 }
